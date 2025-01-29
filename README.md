@@ -3,6 +3,18 @@
 ## Project Overview
 This project demonstrates a scalable multi-service application utilizing microservices architecture with robust data persistence and modular design. It focuses on inter-service communication patterns and flexible system architecture.
 
+### Development Constraints & Choices
+- **Frontend**: While originally planned to use Svelte, the development environment constraints required React. This adaptation maintains the core functionality while leveraging React's robust ecosystem.
+- **Backend Services**: 
+  - Service A: Python Flask for user management (as planned)
+  - Service B: TypeScript/Node.js for post management (adapted from original Deno plan)
+  - Service C: .NET Core for calculator functionality (additional service)
+- **Frontend**: React with modern tooling
+- **Database**: SQLite with Flask-SQLAlchemy and Drizzle ORM
+- **State Management**: React Query
+- **UI Components**: shadcn/ui
+- **Routing**: wouter for client-side routing
+
 ### Core Technologies
 - **Backend Services**:
   - Service A: Python Flask for user management

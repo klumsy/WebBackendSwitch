@@ -14,6 +14,11 @@
 
 ## Challenges Faced
 
+### Development Environment
+1. **Framework Constraints**: Unable to implement Svelte frontend as originally planned
+2. **Technology Limitations**: Had to adapt from Deno to Node.js for TypeScript service
+3. **Build Process**: Required adjustments for .NET service compilation
+
 ### Service Integration
 1. **Initial Setup**: Coordinating multiple services was complex
 2. **CORS Configuration**: Required multiple iterations to get right
