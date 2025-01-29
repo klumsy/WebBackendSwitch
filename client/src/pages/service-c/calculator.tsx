@@ -20,11 +20,17 @@ export default function Calculator() {
   const [isEnabled, setIsEnabled] = useState(false);
   const { toast } = useToast();
 
+  // Get the current hostname from window.location
+  const baseUrl = window.location.hostname.includes('repl.co') 
+    ? `https://${window.location.hostname}:5003` 
+    : 'http://localhost:5003';
+
   const { data, isLoading, error, refetch } = useQuery<CalculationResult>({
     queryKey: ['calculator', number1, number2],
     queryFn: async () => {
       try {
-        const response = await axios.get(`http://localhost:5003/api/calculator/add/${number1}/${number2}`);
+        console.log('Attempting calculation with URL:', `${baseUrl}/api/calculator/add/${number1}/${number2}`);
+        const response = await axios.get(`${baseUrl}/api/calculator/add/${number1}/${number2}`);
         return response.data;
       } catch (err) {
         console.error('Calculator error:', err);
