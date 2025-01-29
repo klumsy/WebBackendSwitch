@@ -2,3 +2,10 @@
 /home/runner/workspace/services/service-c/ServiceC.Business/obj/Debug/net7.0/ServiceC.Business.AssemblyInfoInputs.cache
 /home/runner/workspace/services/service-c/ServiceC.Business/obj/Debug/net7.0/ServiceC.Business.AssemblyInfo.cs
 /home/runner/workspace/services/service-c/ServiceC.Business/obj/Debug/net7.0/ServiceC.Business.csproj.CoreCompileInputs.cache
+/home/runner/workspace/services/service-c/ServiceC.Business/bin/Debug/net7.0/ServiceC.Business.deps.json
+/home/runner/workspace/services/service-c/ServiceC.Business/bin/Debug/net7.0/ServiceC.Business.dll
+/home/runner/workspace/services/service-c/ServiceC.Business/bin/Debug/net7.0/ServiceC.Business.pdb
+/home/runner/workspace/services/service-c/ServiceC.Business/obj/Debug/net7.0/ServiceC.Business.dll
+/home/runner/workspace/services/service-c/ServiceC.Business/obj/Debug/net7.0/refint/ServiceC.Business.dll
+/home/runner/workspace/services/service-c/ServiceC.Business/obj/Debug/net7.0/ServiceC.Business.pdb
+/home/runner/workspace/services/service-c/ServiceC.Business/obj/Debug/net7.0/ref/ServiceC.Business.dll
