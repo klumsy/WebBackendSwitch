@@ -60,6 +60,21 @@ serviceB.on("error", (error) => {
   console.error("Failed to start Service B:", error);
 });
 
+// Start Service C (.NET)
+const serviceC = spawn("dotnet", ["run", "--project", "services/service-c/ServiceC.Api/ServiceC.Api.csproj"], {
+  stdio: "inherit",
+});
+
+serviceC.on("error", (error) => {
+  console.error("Failed to start Service C:", error);
+});
+
+serviceC.on("exit", (code) => {
+  if (code !== 0) {
+    console.error(`Service C exited with code ${code}`);
+  }
+});
+
 (async () => {
   const server = registerRoutes(app);
 
@@ -86,6 +101,7 @@ serviceB.on("error", (error) => {
   process.on("SIGTERM", () => {
     serviceA.kill();
     serviceB.kill();
+    serviceC.kill();
     process.exit(0);
   });
 })();
