@@ -276,6 +276,25 @@ const UserForm = () => {
     }
   };
 };
+
+// React Query Pattern for API Integration
+const { data, isLoading, error } = useQuery<CalculationResult>({
+  queryKey: ['calculator', number1, number2],
+  queryFn: async () => {
+    const response = await axios.get(`/api/calculator/add/${number1}/${number2}`);
+    return response.data;
+  }
+});
+
+// Toast State Management
+const TOAST_LIMIT = 1;
+const TOAST_REMOVE_DELAY = 1000000;
+type ToasterToast = ToastProps & {
+  id: string;
+  title?: React.ReactNode;
+  description?: React.ReactNode;
+  action?: ToastActionElement;
+};
 ```
 
 ### Security Implementation
@@ -367,7 +386,7 @@ describe('Post Creation with User Verification', () => {
   it('should verify user before creating post', async () => {
     // Mock Service A response
     mockServiceA.get('/internal/verify/1').reply(200, { valid: true });
-    
+
     const response = await request(app)
       .post('/api/posts')
       .send({
@@ -375,7 +394,7 @@ describe('Post Creation with User Verification', () => {
         content: 'Content',
         authorId: 1
       });
-    
+
     expect(response.status).toBe(201);
   });
 });
@@ -389,20 +408,20 @@ describe('Post Creation with User Verification', () => {
 interface EnvironmentConfig {
   // Database
   DATABASE_URL: string;
-  
+
   // Security
   SESSION_SECRET: string;
   INTERNAL_API_KEY: string;
-  
+
   // Service URLs
   SERVICE_A_URL: string;
   SERVICE_B_URL: string;
   SERVICE_C_URL: string;
-  
+
   // Monitoring
   LOG_LEVEL: 'debug' | 'info' | 'warn' | 'error';
   SENTRY_DSN?: string;
-  
+
   // Frontend
   VITE_API_URL: string;
 }
@@ -416,16 +435,16 @@ interface EnvironmentConfig {
     "@tanstack/react-query": "^4.0.0",
     "wouter": "^2.0.0",
     "@hookform/resolvers": "^3.0.0",
-    
+
     // Backend
     "express": "^4.0.0",
     "cors": "^2.0.0",
     "winston": "^3.0.0",
-    
+
     // Database
     "drizzle-orm": "^0.28.0",
     "better-sqlite3": "^8.0.0",
-    
+
     // Testing
     "jest": "^29.0.0",
     "ts-jest": "^29.0.0"
@@ -440,11 +459,11 @@ interface EnvironmentConfig {
 // Response Time Monitoring
 app.use((req, res, next) => {
   const start = process.hrtime();
-  
+
   res.on('finish', () => {
     const [seconds, nanoseconds] = process.hrtime(start);
     const duration = seconds * 1000 + nanoseconds / 1000000;
-    
+
     logger.info({
       type: 'request',
       method: req.method,
@@ -453,7 +472,7 @@ app.use((req, res, next) => {
       duration: duration.toFixed(2)
     });
   });
-  
+
   next();
 });
 ```
@@ -463,7 +482,7 @@ app.use((req, res, next) => {
 // Memory Usage Monitoring
 setInterval(() => {
   const usage = process.memoryUsage();
-  
+
   logger.info({
     type: 'memory',
     heapTotal: usage.heapTotal / 1024 / 1024,
@@ -487,7 +506,7 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
     method: req.method,
     requestId: req.id
   });
-  
+
   // Send sanitized error to client
   res.status(500).json({
     error: 'Internal Server Error',
@@ -507,12 +526,12 @@ def handle_error(error):
         'timestamp': datetime.utcnow().isoformat()
     }
     status_code = 500
-    
+
     if isinstance(error, ValidationError):
         status_code = 400
     elif isinstance(error, NotFound):
         status_code = 404
-    
+
     return jsonify(response), status_code
 ```
 
