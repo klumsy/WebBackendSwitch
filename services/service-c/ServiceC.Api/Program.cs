@@ -1,5 +1,11 @@
 var builder = WebApplication.CreateBuilder(args);
 
+// Configure logging
+builder.Logging.ClearProviders();
+builder.Logging.AddConsole();
+builder.Logging.AddDebug();
+builder.Logging.SetMinimumLevel(LogLevel.Information);
+
 // Add services to the container.
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
@@ -36,5 +42,10 @@ if (app.Environment.IsDevelopment())
 app.UseCors();
 app.UseAuthorization();
 app.MapControllers();
+
+// Log startup
+var logger = app.Services.GetRequiredService<ILogger<Program>>();
+logger.LogInformation("Service C starting up at {time}", DateTimeOffset.Now);
+logger.LogInformation("CORS and endpoints configured");
 
 app.Run();
