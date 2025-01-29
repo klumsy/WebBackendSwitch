@@ -1,8 +1,8 @@
 from flask import Flask
 from flask_cors import CORS
 from flask_migrate import Migrate
-from .models import db, User, UserRepository
-from .routes import register_routes
+from services.service_a.src.models import db, User, UserRepository
+from services.service_a.src.routes import register_routes
 import os
 import logging
 
@@ -43,6 +43,7 @@ with app.app_context():
     try:
         # Create database tables
         db.create_all()
+        logger.info("Database tables created successfully")
 
         # Verify database connection by attempting a simple query
         test_query = db.session.query(User).first()
@@ -51,9 +52,11 @@ with app.app_context():
 
         # Create user repository with verified db connection
         user_repository = UserRepository(db)
+        logger.info("User repository initialized successfully")
 
         # Register routes with verified user repository
         register_routes(app, user_repository)
+        logger.info("Routes registered successfully")
 
     except Exception as e:
         logger.error(f"Database initialization failed: {str(e)}")

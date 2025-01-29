@@ -41,6 +41,10 @@ app.use((req, res, next) => {
 // Start Service A (Python Flask)
 const serviceA = spawn("python", ["services/service_a/src/main.py"], {
   stdio: "inherit",
+  env: {
+    ...process.env,
+    PYTHONPATH: process.cwd()
+  }
 });
 
 serviceA.on("error", (error) => {
