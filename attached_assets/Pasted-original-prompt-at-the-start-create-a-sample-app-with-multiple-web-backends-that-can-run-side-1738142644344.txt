@@ -1,0 +1,39 @@
+original prompt at the start:
+
+
+create a sample app, with multiple web backends that can run side by side.. /A will be a python flask application with svelte frontend , since a couple of sample pages, /B will be a deno2 typescript backend with a react front end... then both with have respective API calls, but also there will need to be PRIVATE apis that aren't exposed publically but where they each can call each other (and there should be an example of it).. also both should have an appropriate unit test suite, and be set up with whatever is needed for that, whether an appropriate dependecy injection etc.. the flask stuff shouldn't just put everything into a single router.py with login in it, but use classes for the business logic.. just create some sample classes , and tests for them (for both the python and node examples)
+
+Current Project State:
+
+Backend: TypeScript and Python (Flask) ✓
+Frontend: React with GraphQL API (Partially implemented)
+Database: SQLite with Flask-SQLAlchemy and Flask-Migrate ✓ (Changed from original PostgreSQL)
+State Management: React Query ✓
+Routing: Client-side routing with wouter ✓
+Architecture: Service-based microservices communication pattern (Partially implemented)
+Completed Features:
+
+Basic service architecture setup
+SQLite database integration with Flask-SQLAlchemy
+User management service (Service A) with:
+User creation
+User listing
+Database persistence
+React Query integration for state management
+Basic frontend components using shadcn/ui
+Post management service (Service B) structure
+Changes/Additions:
+
+Switched from PostgreSQL to SQLite for simpler development
+Added proper database session management and error handling
+Implemented query invalidation for real-time updates
+Enhanced logging for debugging
+Still To Be Implemented:
+
+GraphQL API layer
+Complete microservices communication pattern
+Integration between Service A and Service B
+Proper error handling across all services
+Type safety improvements
+Testing infrastructure
+API documentation
