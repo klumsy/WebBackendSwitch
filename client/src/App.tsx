@@ -11,11 +11,11 @@ function Navigation() {
     <nav className="bg-background border-b">
       <div className="container mx-auto px-4 py-3">
         <div className="flex items-center space-x-4">
-          <Link href="/">
-            <a className="text-foreground hover:text-primary">Home</a>
+          <Link href="/" className="text-foreground hover:text-primary">
+            Home
           </Link>
-          <Link href="/users">
-            <a className="text-foreground hover:text-primary">Users</a>
+          <Link href="/users" className="text-foreground hover:text-primary">
+            Users
           </Link>
         </div>
       </div>
