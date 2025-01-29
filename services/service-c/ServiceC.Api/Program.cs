@@ -38,6 +38,22 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+// Add request logging middleware
+app.Use(async (context, next) =>
+{
+    var logger = context.RequestServices.GetRequiredService<ILogger<Program>>();
+    logger.LogInformation("Incoming {Method} request to {Path}", 
+        context.Request.Method, 
+        context.Request.Path);
+
+    await next();
+
+    logger.LogInformation("Completed {Method} request to {Path} with status {StatusCode}",
+        context.Request.Method,
+        context.Request.Path,
+        context.Response.StatusCode);
+});
+
 // Use CORS before routing and endpoints
 app.UseCors();
 app.UseAuthorization();
