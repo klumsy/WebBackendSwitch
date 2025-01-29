@@ -16,20 +16,6 @@ const userSchema = z.object({
 
 type UserFormData = z.infer<typeof userSchema>;
 
-interface Post {
-  id: number;
-  title: string;
-  content: string;
-  userId: number;
-}
-
-interface User {
-  id: number;
-  username: string;
-  email: string;
-  posts?: Post[];
-}
-
 export default function UsersPage() {
   const { toast } = useToast();
   const queryClient = useQueryClient();
@@ -43,7 +29,7 @@ export default function UsersPage() {
     },
   });
 
-  const { data: users = [], isLoading: isLoadingUsers } = useQuery<User[]>({
+  const { data: users, isLoading } = useQuery({
     queryKey: ["/api/users"],
     queryFn: async () => {
       const response = await fetch("/api/users");
@@ -52,23 +38,6 @@ export default function UsersPage() {
       }
       return response.json();
     },
-  });
-
-  // Fetch posts for a specific user
-  const { data: userPosts = {}, isLoading: isLoadingPosts } = useQuery({
-    queryKey: ["/api/posts"],
-    queryFn: async () => {
-      const postsData: Record<number, Post[]> = {};
-      for (const user of users) {
-        const response = await fetch(`/api/posts/user/${user.id}`);
-        if (response.ok) {
-          const posts = await response.json();
-          postsData[user.id] = posts;
-        }
-      }
-      return postsData;
-    },
-    enabled: users.length > 0,
   });
 
   const createUser = useMutation({
@@ -104,8 +73,8 @@ export default function UsersPage() {
     createUser.mutate(data);
   };
 
-  if (isLoadingUsers) {
-    return <div className="container mx-auto p-4">Loading users...</div>;
+  if (isLoading) {
+    return <div>Loading...</div>;
   }
 
   return (
@@ -154,34 +123,15 @@ export default function UsersPage() {
 
         <Card>
           <CardHeader>
-            <CardTitle>Users and Their Posts</CardTitle>
+            <CardTitle>Users List</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="grid gap-4">
-              {users.map((user) => (
-                <Card key={user.id} className="p-4">
-                  <div className="mb-4">
-                    <h3 className="text-lg font-bold">{user.username}</h3>
-                    <p className="text-sm text-muted-foreground">{user.email}</p>
-                  </div>
-                  <div className="pl-4">
-                    <h4 className="text-sm font-semibold mb-2">Posts:</h4>
-                    {isLoadingPosts ? (
-                      <p className="text-sm text-muted-foreground">Loading posts...</p>
-                    ) : userPosts[user.id]?.length > 0 ? (
-                      <ul className="space-y-2">
-                        {userPosts[user.id].map((post) => (
-                          <li key={post.id} className="text-sm">
-                            <strong>{post.title}</strong>
-                            <p className="text-muted-foreground">{post.content}</p>
-                          </li>
-                        ))}
-                      </ul>
-                    ) : (
-                      <p className="text-sm text-muted-foreground">No posts found</p>
-                    )}
-                  </div>
-                </Card>
+            <div className="grid gap-2">
+              {users?.map((user: any) => (
+                <div key={user.id} className="p-4 border rounded">
+                  <p><strong>Username:</strong> {user.username}</p>
+                  <p><strong>Email:</strong> {user.email}</p>
+                </div>
               ))}
             </div>
           </CardContent>
