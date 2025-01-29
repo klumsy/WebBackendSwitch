@@ -4,6 +4,7 @@ import axios from 'axios';
 import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
+import { useToast } from '@/hooks/use-toast';
 
 interface CalculationResult {
   number1: number;
@@ -17,18 +18,31 @@ export default function Calculator() {
   const [number1, setNumber1] = useState<number>(0);
   const [number2, setNumber2] = useState<number>(0);
   const [isEnabled, setIsEnabled] = useState(false);
+  const { toast } = useToast();
 
-  const { data, isLoading, error } = useQuery<CalculationResult>({
+  const { data, isLoading, error, refetch } = useQuery<CalculationResult>({
     queryKey: ['calculator', number1, number2],
     queryFn: async () => {
-      const response = await axios.get(`http://localhost:5003/api/calculator/add/${number1}/${number2}`);
-      return response.data;
+      try {
+        const response = await axios.get(`http://localhost:5003/api/calculator/add/${number1}/${number2}`);
+        return response.data;
+      } catch (err) {
+        console.error('Calculator error:', err);
+        toast({
+          title: 'Error',
+          description: 'Failed to calculate. Please try again.',
+          variant: 'destructive',
+        });
+        throw err;
+      }
     },
-    enabled: isEnabled
+    enabled: isEnabled,
+    retry: 1
   });
 
   const handleCalculate = () => {
     setIsEnabled(true);
+    refetch();
   };
 
   return (
@@ -52,7 +66,7 @@ export default function Calculator() {
         </div>
 
         {isLoading && <p>Loading...</p>}
-        {error && <p className="text-red-500">Error: Failed to calculate</p>}
+        {error && <p className="text-red-500">Error: Failed to calculate. Please try again.</p>}
         {data && (
           <div className="space-y-2">
             <p>Sum: {data.sum}</p>

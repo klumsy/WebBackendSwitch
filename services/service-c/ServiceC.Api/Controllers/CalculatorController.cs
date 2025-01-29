@@ -16,8 +16,16 @@ public class CalculatorController : ControllerBase
     }
 
     [HttpGet("add/{number1}/{number2}")]
-    public ActionResult<CalculationResult> Add(int number1, int number2)
+    public ActionResult<CalculationResult> Add([FromRoute] int number1, [FromRoute] int number2)
     {
-        return Ok(_calculatorService.Add(number1, number2));
+        try
+        {
+            var result = _calculatorService.Add(number1, number2);
+            return Ok(result);
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, $"An error occurred: {ex.Message}");
+        }
     }
 }
