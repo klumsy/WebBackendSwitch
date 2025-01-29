@@ -1,30 +1,21 @@
-from flask import Flask, request, jsonify, g
+from flask import Flask, request, jsonify
 from models import UserRepository
 from typing import Any
 
-def get_user_repository() -> UserRepository:
-    print("[DEBUG] Accessing user repository from flask context")
-    if 'user_repository' not in g:
-        print("[DEBUG] Creating new user repository in flask context")
-        g.user_repository = UserRepository()
-    else:
-        print(f"[DEBUG] Retrieved existing repository with {len(g.user_repository.users)} users")
-    return g.user_repository
+# Create a single, persistent UserRepository instance
+user_repository = UserRepository()
+print("[DEBUG] Creating global UserRepository instance")
 
 def register_routes(app: Flask) -> None:
     @app.before_request
     def before_request():
         print("\n[DEBUG] -------- New Request --------")
         print(f"[DEBUG] Method: {request.method}, Path: {request.path}")
-        if hasattr(g, 'user_repository'):
-            print(f"[DEBUG] Repository exists with {len(g.user_repository.users)} users")
-        else:
-            print("[DEBUG] No repository in context yet")
+        print(f"[DEBUG] Current repository state: {len(user_repository.users)} users")
 
     @app.route('/api/users', methods=['GET'])
     @app.route('/api/users/', methods=['GET'])
     def get_users() -> Any:
-        user_repository = get_user_repository()
         print("[DEBUG] Fetching all users")
         users = user_repository.get_users()
         print(f"[DEBUG] Found {len(users)} users")
@@ -36,7 +27,6 @@ def register_routes(app: Flask) -> None:
 
     @app.route('/api/users/<int:user_id>', methods=['GET'])
     def get_user(user_id: int) -> Any:
-        user_repository = get_user_repository()
         user = user_repository.get_user(user_id)
         if not user:
             return jsonify({'error': 'User not found'}), 404
@@ -51,7 +41,6 @@ def register_routes(app: Flask) -> None:
     def create_user() -> Any:
         data = request.get_json()
         print(f"[DEBUG] Creating user with data: {data}")
-        user_repository = get_user_repository()
         user = user_repository.create_user(
             username=data['username'],
             email=data['email'],
