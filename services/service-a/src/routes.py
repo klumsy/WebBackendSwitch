@@ -1,13 +1,17 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, g
 from models import UserRepository
 from typing import Any
 
-user_repository = UserRepository()
+def get_user_repository() -> UserRepository:
+    if 'user_repository' not in g:
+        g.user_repository = UserRepository()
+    return g.user_repository
 
 def register_routes(app: Flask) -> None:
     @app.route('/api/users', methods=['GET'])
     @app.route('/api/users/', methods=['GET'])
     def get_users() -> Any:
+        user_repository = get_user_repository()
         users = user_repository.get_users()
         print(f"Getting users, found: {len(users)} users")  # Debug log
         return jsonify([{
@@ -18,6 +22,7 @@ def register_routes(app: Flask) -> None:
 
     @app.route('/api/users/<int:user_id>', methods=['GET'])
     def get_user(user_id: int) -> Any:
+        user_repository = get_user_repository()
         user = user_repository.get_user(user_id)
         if not user:
             return jsonify({'error': 'User not found'}), 404
@@ -32,6 +37,7 @@ def register_routes(app: Flask) -> None:
     def create_user() -> Any:
         data = request.get_json()
         print(f"Creating user with data: {data}")  # Debug log
+        user_repository = get_user_repository()
         user = user_repository.create_user(
             username=data['username'],
             email=data['email'],
