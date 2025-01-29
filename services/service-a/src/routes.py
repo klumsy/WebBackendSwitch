@@ -2,13 +2,12 @@ from flask import Flask, request, jsonify
 from models import UserRepository
 from typing import Any
 
-def register_routes(app: Flask) -> None:
-    user_repository = UserRepository() #UserRepository instance is now created within the function.
+def register_routes(app: Flask, user_repository: UserRepository) -> None:
     @app.before_request
     def before_request():
         print("\n[DEBUG] -------- New Request --------")
         print(f"[DEBUG] Method: {request.method}, Path: {request.path}")
-        print(f"[DEBUG] Current repository state: {len(user_repository.users)} users")
+        print(f"[DEBUG] Current request started")
 
     @app.route('/api/users', methods=['GET'])
     @app.route('/api/users/', methods=['GET'])
@@ -38,14 +37,19 @@ def register_routes(app: Flask) -> None:
     def create_user() -> Any:
         data = request.get_json()
         print(f"[DEBUG] Creating user with data: {data}")
-        user = user_repository.create_user(
-            username=data['username'],
-            email=data['email'],
-            password=data['password']
-        )
-        print(f"[DEBUG] Created user: {user.id}, {user.username}")
-        return jsonify({
-            'id': user.id,
-            'username': user.username,
-            'email': user.email
-        }), 201
+
+        try:
+            user = user_repository.create_user(
+                username=data['username'],
+                email=data['email'],
+                password=data['password']
+            )
+            print(f"[DEBUG] Created user: {user.id}, {user.username}")
+            return jsonify({
+                'id': user.id,
+                'username': user.username,
+                'email': user.email
+            }), 201
+        except Exception as e:
+            print(f"[DEBUG] Error creating user: {str(e)}")
+            return jsonify({'error': str(e)}), 400
