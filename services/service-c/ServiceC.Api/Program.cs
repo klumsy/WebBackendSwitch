@@ -5,14 +5,15 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-// Add CORS
+// Add CORS with very permissive settings for development
 builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(policy =>
     {
-        policy.AllowAnyOrigin()
+        policy.SetIsOriginAllowed(_ => true) // Allow any origin
               .AllowAnyHeader()
-              .AllowAnyMethod();
+              .AllowAnyMethod()
+              .AllowCredentials();
     });
 });
 
@@ -20,7 +21,7 @@ builder.Services.AddCors(options =>
 builder.Services.AddScoped<ServiceC.Business.Interfaces.ICalculatorService, ServiceC.Business.Services.CalculatorService>();
 
 // Configure port
-builder.WebHost.UseUrls("http://0.0.0.0:5003");
+builder.WebHost.UseUrls("http://0.0.0.0:5003", "https://0.0.0.0:5003");
 
 var app = builder.Build();
 
@@ -31,6 +32,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+// Use CORS before routing and endpoints
 app.UseCors();
 app.UseAuthorization();
 app.MapControllers();
