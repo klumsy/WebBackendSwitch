@@ -20,7 +20,6 @@
 ```
 
 ### Critical Components
-
 #### 1. Express Gateway (server/routes.ts)
 - **Role**: Central API gateway and request router
 - **Key Responsibilities**:
@@ -83,6 +82,17 @@
   - Query batching and optimization
   - Error handling and formatting
   - Schema stitching
+
+### GraphQL Schema Architecture:
+- Type definitions for services A and B
+- Query and Mutation segregation
+- Input type validations
+
+### Resolver Implementation:
+- Service client abstractions
+- Error handling in resolvers
+- Cross-service data fetching
+
 
 ### Inter-Service Communication
 
@@ -174,16 +184,62 @@ app.use((req, res, next) => {
 ### State Management
 
 #### 1. Frontend State
+```typescript
+// React Query Pattern for API Integration
+const { data, isLoading, error } = useQuery<CalculationResult>({
+  queryKey: ['calculator', number1, number2],
+  queryFn: async () => {
+    const response = await axios.get(`/api/calculator/add/${number1}/${number2}`);
+    return response.data;
+  }
+});
+
+// Toast State Management
+const TOAST_LIMIT = 1;
+const TOAST_REMOVE_DELAY = 1000000;
+type ToasterToast = ToastProps & {
+  id: string;
+  title?: React.ReactNode;
+  description?: React.ReactNode;
+  action?: ToastActionElement;
+};
+```
+
 - React Query for server state
+  - Automatic cache invalidation
+  - Error handling patterns
+  - Loading state management
+  - Query key structure for cache control
 - Local state management
+  - Component-level useState
+  - Context-based shared state
+  - Mobile responsive state hooks
 - Form state with react-hook-form
+  - Zod schema validation
+  - Error handling and display
+  - Field-level validation
 - Cache invalidation strategy
+  - Query invalidation patterns
+  - Optimistic updates
+  - Background refetching
 
 #### 2. Backend State
 - Database persistence
+  - SQLite with Drizzle ORM (Service B)
+  - Flask-SQLAlchemy (Service A)
+  - Entity relationships
 - Session management
+  - Express session middleware
+  - Passport authentication
+  - Session store configuration
 - Cache management
+  - Query result caching
+  - Session data caching
+  - API response caching
 - State synchronization
+  - Cross-service data consistency
+  - Event-based updates
+  - Real-time data propagation
 
 ### Testing Architecture
 
