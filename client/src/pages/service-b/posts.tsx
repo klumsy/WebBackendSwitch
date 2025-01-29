@@ -10,11 +10,18 @@ import { z } from "zod";
 import { useToast } from "@/hooks/use-toast";
 import { queryClient } from "@/lib/queryClient";
 
+interface Author {
+  id: number;
+  username: string;
+  email: string;
+}
+
 interface Post {
   id: number;
   title: string;
   content: string;
   authorId: number;
+  author?: Author;
 }
 
 const postSchema = z.object({
@@ -55,7 +62,8 @@ export default function PostsPage() {
         body: JSON.stringify(data),
       });
       if (!response.ok) {
-        throw new Error("Failed to create post");
+        const error = await response.json();
+        throw new Error(error.error || "Failed to create post");
       }
       return response.json();
     },
@@ -128,11 +136,17 @@ export default function PostsPage() {
                 <div key={post.id} className="p-4 border rounded">
                   <h3 className="text-lg font-semibold">{post.title}</h3>
                   <p className="mt-2">{post.content}</p>
-                  <p className="text-sm text-muted-foreground mt-2">
-                    Author ID: {post.authorId}
-                  </p>
+                  <div className="text-sm text-muted-foreground mt-2 flex justify-between">
+                    <span>Author ID: {post.authorId}</span>
+                    {post.author && (
+                      <span>By: {post.author.username}</span>
+                    )}
+                  </div>
                 </div>
               ))}
+              {posts.length === 0 && (
+                <p className="text-muted-foreground">No posts yet. Create one above!</p>
+              )}
             </div>
           </CardContent>
         </Card>
