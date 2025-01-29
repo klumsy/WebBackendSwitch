@@ -30,6 +30,12 @@ export class PostRepository {
     `);
   }
 
+  // Added method to clear all posts - useful for testing
+  clearPosts(): void {
+    const stmt = this.db.prepare('DELETE FROM posts');
+    stmt.run();
+  }
+
   createPost(title: string, content: string, authorId: number): Post {
     const stmt = this.db.prepare(
       'INSERT INTO posts (title, content, authorId) VALUES (?, ?, ?)'
