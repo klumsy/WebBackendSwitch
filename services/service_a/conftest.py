@@ -1,6 +1,4 @@
 import pytest
-from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
 import os
 import sys
 import logging
@@ -9,15 +7,18 @@ import logging
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
-# Add src directory to Python path
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../src')))
+# Add the project root directory to Python path
+PROJECT_ROOT = os.path.abspath(os.path.dirname(__file__))
+sys.path.insert(0, os.path.dirname(os.path.dirname(PROJECT_ROOT)))
 
-from models import db, User, UserRepository
-from routes import register_routes
+# Import after path setup
+from services.service_a.src.models import db, UserRepository
+from services.service_a.src.routes import register_routes
 
 @pytest.fixture
 def app():
     """Create and configure a new app instance for each test."""
+    from flask import Flask
     logger.debug("Setting up test Flask application")
     app = Flask(__name__)
 
@@ -32,6 +33,7 @@ def app():
     with app.app_context():
         logger.debug("Creating database tables")
         db.create_all()
+
         # Create user repository
         user_repository = UserRepository(db)
         # Register routes
@@ -49,12 +51,6 @@ def client(app):
     """Test client for the app."""
     logger.debug("Creating test client")
     return app.test_client()
-
-@pytest.fixture
-def runner(app):
-    """Test CLI runner for the app."""
-    logger.debug("Creating test CLI runner")
-    return app.test_cli_runner()
 
 @pytest.fixture
 def user_repository(app):

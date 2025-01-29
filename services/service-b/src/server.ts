@@ -4,6 +4,19 @@ import axios from 'axios';
 import { registerRoutes } from './routes';
 import { PostRepository } from './models';
 
+// Setup colored logging
+const colors = {
+    reset: "\x1b[0m",
+    green: "\x1b[32m",
+    blue: "\x1b[34m"
+};
+
+const log = {
+    info: (message: string) => console.log(`${colors.green}[SERVICE-B] INFO: ${message}${colors.reset}`),
+    debug: (message: string) => console.log(`${colors.blue}[SERVICE-B] DEBUG: ${message}${colors.reset}`),
+    error: (message: string) => console.error(`\x1b[31m[SERVICE-B] ERROR: ${message}${colors.reset}`)
+};
+
 const app = express();
 const INTERNAL_API_KEY = process.env.INTERNAL_API_KEY || 'dev_internal_key_123';
 const SERVICE_A_URL = 'http://localhost:5001';
@@ -51,8 +64,8 @@ const verifyUser = async (
         } else {
             res.status(404).json({ error: 'User not found' });
         }
-    } catch (error) {
-        console.error('[ERROR] User verification failed:', error);
+    } catch (error: any) {
+        log.error(`User verification failed: ${error}`);
         res.status(500).json({ error: 'Failed to verify user' });
     }
 };
@@ -76,7 +89,7 @@ registerRoutes(app, postRepository);
 app.get('/internal/api/posts/user/:userId', requireInternalAuth, verifyUser, async (req, res) => {
     try {
         const userId = parseInt(req.params.userId);
-        console.log(`[DEBUG] Internal API: Fetching posts for user ${userId}`);
+        log.debug(`Internal API: Fetching posts for user ${userId}`);
 
         // Get posts from the database
         const posts = postRepository.getPostsByAuthor(userId);
@@ -88,13 +101,13 @@ app.get('/internal/api/posts/user/:userId', requireInternalAuth, verifyUser, asy
         }));
 
         return res.json(postsWithAuthor);
-    } catch (error) {
-        console.error('[ERROR] Internal API error:', error);
+    } catch (error: any) {
+        log.error(`Internal API error: ${error}`);
         return res.status(500).json({ error: 'Internal server error' });
     }
 });
 
 const port = 5002;
 app.listen(port, '0.0.0.0', () => {
-    console.log(`Service B listening at http://localhost:${port}`);
+    log.info(`Service B listening at http://localhost:${port}`);
 });

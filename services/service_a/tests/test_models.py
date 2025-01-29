@@ -1,5 +1,5 @@
 import pytest
-from src.models import User, UserRepository
+from services.service_a.src.models import User, UserRepository
 
 def test_user_creation(app):
     """Test creating a user with valid data"""
