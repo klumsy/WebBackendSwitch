@@ -1,4 +1,4 @@
-import { useQuery, useMutation } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
@@ -18,6 +18,8 @@ type UserFormData = z.infer<typeof userSchema>;
 
 export default function UsersPage() {
   const { toast } = useToast();
+  const queryClient = useQueryClient();
+
   const form = useForm<UserFormData>({
     resolver: zodResolver(userSchema),
     defaultValues: {
@@ -29,6 +31,13 @@ export default function UsersPage() {
 
   const { data: users, isLoading } = useQuery({
     queryKey: ["/api/users"],
+    queryFn: async () => {
+      const response = await fetch("/api/users");
+      if (!response.ok) {
+        throw new Error("Failed to fetch users");
+      }
+      return response.json();
+    },
   });
 
   const createUser = useMutation({
@@ -44,6 +53,7 @@ export default function UsersPage() {
       return response.json();
     },
     onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/users"] });
       toast({
         title: "Success",
         description: "User created successfully",
