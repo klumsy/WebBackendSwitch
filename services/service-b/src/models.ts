@@ -1,9 +1,8 @@
 import Database from 'better-sqlite3';
-import { fileURLToPath } from 'url';
-import { dirname, join } from 'path';
+import { join, dirname } from 'path';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+// Use Node's __dirname for test compatibility
+const dbPath = join(process.cwd(), 'services', 'service-b', 'posts.sqlite');
 
 export interface Post {
   id: number;
@@ -15,9 +14,8 @@ export interface Post {
 export class PostRepository {
   private db: Database.Database;
 
-  constructor() {
-    const dbPath = join(__dirname, '..', 'posts.sqlite');
-    this.db = new Database(dbPath);
+  constructor(testDbPath?: string) {
+    this.db = new Database(testDbPath || dbPath);
     this.initializeDatabase();
   }
 
