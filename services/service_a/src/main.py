@@ -1,8 +1,8 @@
 from flask import Flask
 from flask_cors import CORS
 from flask_migrate import Migrate
-from models import db, User, UserRepository
-from routes import register_routes
+from .models import db, User, UserRepository
+from .routes import register_routes
 import os
 import logging
 
@@ -12,11 +12,11 @@ class ColorFormatter(logging.Formatter):
     green = "\x1b[32;20m"
     blue = "\x1b[34;20m"
     reset = "\x1b[0m"
-    format = "%(asctime)s - [SERVICE-A] %(levelname)s: %(message)s"
+    format_str = "%(asctime)s - [SERVICE-A] %(levelname)s: %(message)s"
 
     def format(self, record):
         color = self.green if record.levelno == logging.INFO else self.blue
-        formatter = logging.Formatter(f"{color}{self.format}{self.reset}")
+        formatter = logging.Formatter(f"{color}{self.format_str}{self.reset}")
         return formatter.format(record)
 
 # Set up logging

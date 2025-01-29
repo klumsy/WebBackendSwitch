@@ -39,7 +39,7 @@ app.use((req, res, next) => {
 });
 
 // Start Service A (Python Flask)
-const serviceA = spawn("python", ["services/service-a/src/main.py"], {
+const serviceA = spawn("python", ["services/service_a/src/main.py"], {
   stdio: "inherit",
 });
 

@@ -1,5 +1,5 @@
 from flask import Flask, request, jsonify
-from models import UserRepository
+from .models import UserRepository
 from typing import Any
 import os
 
