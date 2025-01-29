@@ -1,0 +1,4 @@
+/home/runner/workspace/services/service-c/ServiceC.Business/obj/Debug/net7.0/ServiceC.Business.GeneratedMSBuildEditorConfig.editorconfig
+/home/runner/workspace/services/service-c/ServiceC.Business/obj/Debug/net7.0/ServiceC.Business.AssemblyInfoInputs.cache
+/home/runner/workspace/services/service-c/ServiceC.Business/obj/Debug/net7.0/ServiceC.Business.AssemblyInfo.cs
+/home/runner/workspace/services/service-c/ServiceC.Business/obj/Debug/net7.0/ServiceC.Business.csproj.CoreCompileInputs.cache

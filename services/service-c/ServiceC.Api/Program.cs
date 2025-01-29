@@ -1,26 +1,38 @@
-using ServiceC.Business.Interfaces;
-using ServiceC.Business.Services;
-
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllers();
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
+// Add CORS
 builder.Services.AddCors(options =>
 {
-    options.AddDefaultPolicy(builder =>
+    options.AddDefaultPolicy(policy =>
     {
-        builder.AllowAnyOrigin()
-               .AllowAnyMethod()
-               .AllowAnyHeader();
+        policy.AllowAnyOrigin()
+              .AllowAnyHeader()
+              .AllowAnyMethod();
     });
 });
 
-// Add Business Logic services
-builder.Services.AddScoped<ICalculatorService, CalculatorService>();
+// Register calculator service
+builder.Services.AddScoped<ServiceC.Business.Interfaces.ICalculatorService, ServiceC.Business.Services.CalculatorService>();
+
+// Configure port
+builder.WebHost.UseUrls("http://0.0.0.0:5003");
 
 var app = builder.Build();
 
+// Configure the HTTP request pipeline.
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
+
 app.UseCors();
+app.UseAuthorization();
 app.MapControllers();
 
-app.Run("http://0.0.0.0:5003");
+app.Run();

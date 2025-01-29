@@ -1,3 +1,5 @@
+using ServiceC.Business.Models;
+
 namespace ServiceC.Business.Interfaces;
 
 public interface ICalculatorService
