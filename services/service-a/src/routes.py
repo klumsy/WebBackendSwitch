@@ -2,11 +2,8 @@ from flask import Flask, request, jsonify
 from models import UserRepository
 from typing import Any
 
-# Create a single, persistent UserRepository instance
-user_repository = UserRepository()
-print("[DEBUG] Creating global UserRepository instance")
-
 def register_routes(app: Flask) -> None:
+    user_repository = UserRepository() #UserRepository instance is now created within the function.
     @app.before_request
     def before_request():
         print("\n[DEBUG] -------- New Request --------")
@@ -47,7 +44,6 @@ def register_routes(app: Flask) -> None:
             password=data['password']
         )
         print(f"[DEBUG] Created user: {user.id}, {user.username}")
-        print(f"[DEBUG] Current repository state: {len(user_repository.users)} users")
         return jsonify({
             'id': user.id,
             'username': user.username,
