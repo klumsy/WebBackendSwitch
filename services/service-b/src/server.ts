@@ -2,10 +2,14 @@ import express from 'express';
 import cors from 'cors';
 import axios from 'axios';
 import { registerRoutes } from './routes';
+import { PostRepository } from './models';
 
 const app = express();
 const INTERNAL_API_KEY = process.env.INTERNAL_API_KEY || 'dev_internal_key_123';
 const SERVICE_A_URL = 'http://localhost:5001';
+
+// Initialize repositories
+const postRepository = new PostRepository();
 
 // Middleware for internal API authentication
 const requireInternalAuth = (
@@ -23,8 +27,8 @@ const requireInternalAuth = (
 app.use(cors());
 app.use(express.json());
 
-// Initialize routes
-registerRoutes(app);
+// Initialize routes with repository
+registerRoutes(app, postRepository);
 
 // Internal API endpoints
 app.get('/internal/api/posts/user/:userId', requireInternalAuth, async (req, res) => {
@@ -46,12 +50,8 @@ app.get('/internal/api/posts/user/:userId', requireInternalAuth, async (req, res
             return res.status(404).json({ error: 'User not found' });
         }
 
-        // Here you would fetch posts for the user from your database
-        // For now, returning mock data
-        const posts = [
-            { id: 1, title: 'Test Post', content: 'Content', userId }
-        ];
-
+        // Get posts from the database
+        const posts = postRepository.getPostsByAuthor(userId);
         return res.json(posts);
     } catch (error) {
         console.error('[ERROR] Internal API error:', error);
