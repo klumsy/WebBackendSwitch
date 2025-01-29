@@ -20,19 +20,11 @@ export default function Calculator() {
   const [isEnabled, setIsEnabled] = useState(false);
   const { toast } = useToast();
 
-  // Handle Replit domain correctly
-  const baseUrl = window.location.hostname.includes('repl.co') 
-    ? `https://${window.location.hostname.replace('-0--', '-5003--')}` 
-    : 'http://localhost:5003';
-
   const { data, isLoading, error, refetch } = useQuery<CalculationResult>({
     queryKey: ['calculator', number1, number2],
     queryFn: async () => {
       try {
-        const url = `${baseUrl}/api/calculator/add/${number1}/${number2}`;
-        console.log('Attempting calculation with URL:', url);
-        console.log('Current hostname:', window.location.hostname);
-        const response = await axios.get(url);
+        const response = await axios.get(`/api/calculator/add/${number1}/${number2}`);
         return response.data;
       } catch (err) {
         console.error('Calculator error:', err);

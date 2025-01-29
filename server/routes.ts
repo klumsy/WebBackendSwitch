@@ -4,6 +4,7 @@ import axios from "axios";
 
 const SERVICE_A_URL = "http://localhost:5001";
 const SERVICE_B_URL = "http://localhost:5002";
+const SERVICE_C_URL = "http://localhost:5003";
 const INTERNAL_API_KEY = process.env.INTERNAL_API_KEY || "dev_internal_key_123";
 
 export function registerRoutes(app: Express): Server {
@@ -33,6 +34,22 @@ export function registerRoutes(app: Express): Server {
       });
       res.status(response.status).json(response.data);
     } catch (error: any) {
+      res.status(error.response?.status || 500).json(error.response?.data || { message: error.message });
+    }
+  });
+
+  // Service C routes (Calculator)
+  app.use("/api/calculator", async (req, res) => {
+    try {
+      const response = await axios({
+        method: req.method,
+        url: `${SERVICE_C_URL}/api/calculator${req.path}`,
+        data: req.body,
+        headers: req.headers,
+      });
+      res.status(response.status).json(response.data);
+    } catch (error: any) {
+      console.error('Service C Error:', error.message);
       res.status(error.response?.status || 500).json(error.response?.data || { message: error.message });
     }
   });
