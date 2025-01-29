@@ -20,11 +20,10 @@ export default function Calculator() {
   const [isEnabled, setIsEnabled] = useState(false);
   const { toast } = useToast();
 
-  // Get the current protocol and hostname
-  const protocol = window.location.protocol;
+  // Force HTTP in development
   const baseUrl = window.location.hostname.includes('repl.co') 
-    ? `${protocol}//${window.location.hostname.replace('0--', '')}:5003` 
-    : `${protocol}//localhost:5003`;
+    ? `http://${window.location.hostname.replace('0--', '')}:5003` 
+    : 'http://localhost:5003';
 
   const { data, isLoading, error, refetch } = useQuery<CalculationResult>({
     queryKey: ['calculator', number1, number2],

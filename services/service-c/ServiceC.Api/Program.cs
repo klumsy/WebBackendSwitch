@@ -26,8 +26,8 @@ builder.Services.AddCors(options =>
 // Register calculator service
 builder.Services.AddScoped<ServiceC.Business.Interfaces.ICalculatorService, ServiceC.Business.Services.CalculatorService>();
 
-// Configure port
-builder.WebHost.UseUrls("http://0.0.0.0:5003", "https://0.0.0.0:5003");
+// Configure port - use HTTP only for development
+builder.WebHost.UseUrls("http://0.0.0.0:5003");
 
 var app = builder.Build();
 
