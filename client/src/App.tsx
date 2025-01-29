@@ -5,6 +5,7 @@ import { Toaster } from "@/components/ui/toaster";
 import NotFound from "@/pages/not-found";
 import UsersPage from "@/pages/service-a/users";
 import PostsPage from "@/pages/service-b/posts";
+import VerifyPage from "@/pages/service-a/verify";
 import Home from "@/pages/home";
 
 function Navigation() {
@@ -21,6 +22,9 @@ function Navigation() {
           <Link href="/posts" className="text-foreground hover:text-primary">
             Posts
           </Link>
+          <Link href="/verify" className="text-foreground hover:text-primary">
+            Verify Services
+          </Link>
         </div>
       </div>
     </nav>
@@ -35,6 +39,7 @@ function Router() {
         <Route path="/" component={Home} />
         <Route path="/users" component={UsersPage} />
         <Route path="/posts" component={PostsPage} />
+        <Route path="/verify" component={VerifyPage} />
         <Route component={NotFound} />
       </Switch>
     </div>
