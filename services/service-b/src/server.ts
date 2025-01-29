@@ -8,7 +8,11 @@ const INTERNAL_API_KEY = process.env.INTERNAL_API_KEY || 'dev_internal_key_123';
 const SERVICE_A_URL = 'http://localhost:5001';
 
 // Middleware for internal API authentication
-const requireInternalAuth = (req: express.Request, res: express.Response, next: express.Function) => {
+const requireInternalAuth = (
+    req: express.Request,
+    res: express.Response,
+    next: express.NextFunction
+) => {
     const authKey = req.headers['x-internal-api-key'];
     if (!authKey || authKey !== INTERNAL_API_KEY) {
         return res.status(401).json({ error: 'Unauthorized' });
