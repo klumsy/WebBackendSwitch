@@ -28,23 +28,34 @@ class User(db.Model):
 class UserRepository:
     def __init__(self, db):
         self.db = db
-        print("[DEBUG] Initializing UserRepository")
+        print("[DEBUG] Initializing UserRepository with db instance")
 
     def create_user(self, username: str, email: str, password: str) -> User:
         print(f"[DEBUG] Creating user in repository - Before: ")
-        user = User(username=username, email=email, password=password)
-        self.db.session.add(user)
-        self.db.session.commit()
-        print(f"[DEBUG] User created - id: {user.id}, Current users count: ")
-        print(f"[DEBUG] All users: ")
-        return user
+        try:
+            user = User(username=username, email=email, password=password)
+            self.db.session.add(user)
+            print(f"[DEBUG] Added user to session, about to commit")
+            self.db.session.commit()
+            print(f"[DEBUG] User created - id: {user.id}")
+            return user
+        except Exception as e:
+            print(f"[DEBUG] Error in create_user: {str(e)}")
+            self.db.session.rollback()
+            raise
 
     def get_user(self, user_id: int) -> Optional[User]:
         print(f"[DEBUG] Getting user by id: {user_id}")
         return self.db.session.query(User).get(user_id)
 
     def get_users(self) -> List[User]:
-        print(f"[DEBUG] Getting all users")
-        users = self.db.session.query(User).all()
-        print(f"[DEBUG] User list: {[(u.id, u.username) for u in users]}")
-        return users
+        print(f"[DEBUG] Getting all users - Start")
+        try:
+            query = self.db.session.query(User)
+            print(f"[DEBUG] Query created: {str(query)}")
+            users = query.all()
+            print(f"[DEBUG] Query executed, found users: {[(u.id, u.username) for u in users]}")
+            return users
+        except Exception as e:
+            print(f"[DEBUG] Error in get_users: {str(e)}")
+            return []
