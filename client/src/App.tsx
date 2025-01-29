@@ -6,6 +6,7 @@ import NotFound from "@/pages/not-found";
 import UsersPage from "@/pages/service-a/users";
 import PostsPage from "@/pages/service-b/posts";
 import VerifyPage from "@/pages/service-a/verify";
+import Calculator from "@/pages/service-c/calculator";
 import Home from "@/pages/home";
 
 function Navigation() {
@@ -25,6 +26,9 @@ function Navigation() {
           <Link href="/verify" className="text-foreground hover:text-primary">
             Verify Services
           </Link>
+          <Link href="/calculator" className="text-foreground hover:text-primary">
+            Calculator
+          </Link>
         </div>
       </div>
     </nav>
@@ -40,6 +44,7 @@ function Router() {
         <Route path="/users" component={UsersPage} />
         <Route path="/posts" component={PostsPage} />
         <Route path="/verify" component={VerifyPage} />
+        <Route path="/calculator" component={Calculator} />
         <Route component={NotFound} />
       </Switch>
     </div>
