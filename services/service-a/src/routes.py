@@ -9,6 +9,7 @@ def register_routes(app: Flask) -> None:
     @app.route('/api/users/', methods=['GET'])
     def get_users() -> Any:
         users = user_repository.get_users()
+        print(f"Getting users, found: {len(users)} users")  # Debug log
         return jsonify([{
             'id': user.id,
             'username': user.username,
@@ -30,11 +31,13 @@ def register_routes(app: Flask) -> None:
     @app.route('/api/users/', methods=['POST'])
     def create_user() -> Any:
         data = request.get_json()
+        print(f"Creating user with data: {data}")  # Debug log
         user = user_repository.create_user(
             username=data['username'],
             email=data['email'],
             password=data['password']
         )
+        print(f"Created user: {user.id}, {user.username}")  # Debug log
         return jsonify({
             'id': user.id,
             'username': user.username,
