@@ -10,6 +10,13 @@ import { z } from "zod";
 import { useToast } from "@/hooks/use-toast";
 import { queryClient } from "@/lib/queryClient";
 
+interface Post {
+  id: number;
+  title: string;
+  content: string;
+  authorId: number;
+}
+
 const postSchema = z.object({
   title: z.string().min(3, "Title must be at least 3 characters"),
   content: z.string().min(10, "Content must be at least 10 characters"),
@@ -25,12 +32,19 @@ export default function PostsPage() {
     defaultValues: {
       title: "",
       content: "",
-      authorId: 1, // For now hardcode to first user
+      authorId: 1, // Using the same test user ID as verify page
     },
   });
 
-  const { data: posts = [], isLoading } = useQuery({
+  const { data: posts = [], isLoading } = useQuery<Post[]>({
     queryKey: ["/api/posts"],
+    queryFn: async () => {
+      const response = await fetch("/api/posts");
+      if (!response.ok) {
+        throw new Error("Failed to fetch posts");
+      }
+      return response.json();
+    },
   });
 
   const createPost = useMutation({
@@ -110,7 +124,7 @@ export default function PostsPage() {
           </CardHeader>
           <CardContent>
             <div className="grid gap-2">
-              {posts.map((post: any) => (
+              {posts.map((post) => (
                 <div key={post.id} className="p-4 border rounded">
                   <h3 className="text-lg font-semibold">{post.title}</h3>
                   <p className="mt-2">{post.content}</p>
