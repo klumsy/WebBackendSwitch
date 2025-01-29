@@ -6,6 +6,7 @@ user_repository = UserRepository()
 
 def register_routes(app: Flask) -> None:
     @app.route('/api/users', methods=['GET'])
+    @app.route('/api/users/', methods=['GET'])
     def get_users() -> Any:
         users = user_repository.get_users()
         return jsonify([{
@@ -26,6 +27,7 @@ def register_routes(app: Flask) -> None:
         })
 
     @app.route('/api/users', methods=['POST'])
+    @app.route('/api/users/', methods=['POST'])
     def create_user() -> Any:
         data = request.get_json()
         user = user_repository.create_user(

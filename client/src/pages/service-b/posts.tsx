@@ -8,6 +8,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useToast } from "@/hooks/use-toast";
+import { queryClient } from "@/lib/queryClient";
 
 const postSchema = z.object({
   title: z.string().min(3, "Title must be at least 3 characters"),
@@ -28,7 +29,7 @@ export default function PostsPage() {
     },
   });
 
-  const { data: posts, isLoading } = useQuery({
+  const { data: posts = [], isLoading } = useQuery({
     queryKey: ["/api/posts"],
   });
 
@@ -45,6 +46,7 @@ export default function PostsPage() {
       return response.json();
     },
     onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/posts"] });
       toast({
         title: "Success",
         description: "Post created successfully",
@@ -108,7 +110,7 @@ export default function PostsPage() {
           </CardHeader>
           <CardContent>
             <div className="grid gap-2">
-              {posts?.map((post: any) => (
+              {posts.map((post: any) => (
                 <div key={post.id} className="p-4 border rounded">
                   <h3 className="text-lg font-semibold">{post.title}</h3>
                   <p className="mt-2">{post.content}</p>
