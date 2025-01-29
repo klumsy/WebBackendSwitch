@@ -24,9 +24,7 @@ export default function VerifyPage() {
   const { data: user, isLoading: userLoading } = useQuery({
     queryKey: ["verifyUser", userId],
     queryFn: async () => {
-      const response = await axios.get<User>(
-        `/internal/api/users/verify/${userId}`
-      );
+      const response = await axios.get<User>(`/api/verify/user/${userId}`);
       return response.data;
     },
   });
@@ -34,9 +32,7 @@ export default function VerifyPage() {
   const { data: posts, isLoading: postsLoading } = useQuery({
     queryKey: ["userPosts", userId],
     queryFn: async () => {
-      const response = await axios.get<Post[]>(
-        `/internal/api/posts/user/${userId}`
-      );
+      const response = await axios.get<Post[]>(`/api/verify/user/${userId}/posts`);
       return response.data;
     },
     enabled: !!user?.verified,
