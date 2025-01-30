@@ -2,15 +2,18 @@
 
 A production-ready, security-focused microservices framework demonstrating modern architectural patterns and best practices in distributed systems design.
 
-## 🎯 Project Overview
+## 🔬 Research Project Overview
 
-This project showcases a robust implementation of microservices architecture, focusing on:
-- Secure inter-service communication
-- Flexible system architecture
-- Comprehensive testing coverage
-- Production-ready security measures
+This project was created as a comprehensive research initiative to explore and demonstrate:
+1. Using AI agents (specifically Replit) to architect and build complex, multi-layer applications
+2. Implementing proper separation of concerns across different technology stacks
+3. Integrating comprehensive testing strategies across all layers
+4. Analyzing security implications and best practices in microservices
+5. Documenting the development process and architectural decisions
 
-### Why This Project?
+The goal was to create a real-world example of how AI-assisted development can handle complex architectural decisions, security considerations, and testing requirements while maintaining code quality and proper separation of concerns.
+
+## Why This Project?
 
 This framework was created to demonstrate how to:
 1. Build scalable microservices with proper separation of concerns
@@ -62,14 +65,14 @@ For detailed architecture information, see [Technical Architecture](./README2.MD
 
 3. **Environment Configuration**
    - Copy `.env.example` to `.env`
-   - Configure required environment variables (see [Environment Setup](#environment-setup))
+   - Configure required environment variables (see [Environment Setup](./ENVIRONMENT_SETUP.md))
 
 4. **Start Development Server**
    ```bash
    npm run dev
    ```
 
-For detailed setup instructions, see [Development Guidelines](./PRD2.MD).
+For detailed setup instructions, see [Environment Setup](./ENVIRONMENT_SETUP.md).
 
 ## 🧪 Testing
 
@@ -90,14 +93,14 @@ cd services/service-b
 npm test
 
 # Service C
-cd services/service-c
+cd services/service_c
 dotnet test
 
 # Frontend
 npm run test
 ```
 
-For comprehensive test documentation, see [PRD2.MD](./PRD2.MD#testing-requirements).
+For comprehensive test documentation, see the testing sections in our [Product Requirements Document](./PRD3.MD).
 
 ## 🛡 Security
 
@@ -114,12 +117,13 @@ This project implements comprehensive security measures across all services. Key
 
 ## 📚 Documentation
 
-- [Original Requirements](./ORIGINALREADME.md)
-- [Technical Architecture](./README2.MD)
-- [Product Requirements](./PRD2.MD)
-- [Technical Implementation](./PRD3.MD)
+- [Original Technical Overview](./ORIGINALREADME.md)
+- [Latest Technical Overview](./README2.MD)
+- [Initial Product Requirements](./PRD2.MD)
+- [Detailed Product Requirements](./PRD3.MD)
 - [Security Analysis](./SECURITYREPORT.MD)
 - [Security Recommendations](./SECURITYRECOMMENDATIONS.MD)
+- [Environment Setup Guide](./ENVIRONMENT_SETUP.md)
 
 ## 💻 Development Costs
 
@@ -149,7 +153,7 @@ For detailed estimates, see [ESTIMATES.MD](./ESTIMATES.MD).
 5. Deploy services
 6. Configure SSL/TLS
 
-For detailed deployment instructions, see [PRD3.MD](./PRD3.MD#deployment-configuration).
+For detailed deployment instructions, see [Environment Setup Guide](./ENVIRONMENT_SETUP.md#production-environment).
 
 ## 🤝 Contributing
 
@@ -182,8 +186,8 @@ The application is designed to handle:
 - Sub-200ms API response times
 - Efficient cross-service communication
 
-For detailed performance metrics, see [PRD2.MD](./PRD2.MD#performance-requirements).
+For detailed performance metrics and monitoring implementation, see [Environment Setup Guide](./ENVIRONMENT_SETUP.md#monitoring-setup).
 
 ---
 
-Built with ❤️ by [Your Team Name]
+Built with ❤️ by Karl Prosser
